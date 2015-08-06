@@ -1,0 +1,425 @@
+/* @override http://dev.site/wp-content/plugins/membership/membershipincludes/css/publicforms.css?ver=3.3.1 */
+
+#membership-wrapper form {
+  margin: 0 0 18px;
+}
+#membership-wrapper fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+a.paa_fieldaddlistion {
+  background: none repeat scroll 0 0 #009815;
+  border: 1px solid #737373;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+#membership-wrapper legend {
+    font-size: 36px;
+	line-height: 1.2em;
+	text-shadow: 1px 1px rgba(255,255,255,.7);
+	letter-spacing: 0px;
+	font-family: 'Oswald', sans-serif;
+	margin: 22px 0px 2px 0;
+	color:#343a41;		display:none;
+}
+#membership-wrapper label {
+  display: block;
+  margin-bottom: 5px;
+}
+.paymentpopup {
+  background: none repeat scroll 0 0 #f2ecd8;
+  border-radius: 8px;
+  box-shadow: 0 0 6px #4f4f4f;
+  /*height: 455px;*/
+  margin: 30px auto 0;
+  padding: 20px;
+  width: 350px;
+}
+.paymentnote {
+  float: left;
+  text-align: center;
+  width: 100%;
+}
+.buynowcolumn input[type="submit"] {
+  background: none repeat scroll 0 0 #18a028;
+  border: medium none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px !important;
+  font-weight: normal !important;
+margin:-66px 13px !important;
+ /* margin: -85px 13px !important;*/
+  padding: 10px 20px !important;
+  text-shadow: 0 1px 1px #343434;
+}
+.paymentpopup .purchasetable .listing-detail-subtitle {
+  display: none;
+}
+.paymentpopup .purchasetable .hide {
+  display: none;
+}
+.couponInput {
+  border: medium none;
+  border-radius: 5px;
+  width: 90%;
+}
+.couponQuestion {
+  text-align: center;
+}
+.membership_coupon_form.couponbar {
+  float: left;
+  margin: 10px 0;
+}
+#submit_coupon_code {
+  float: right !important;
+  margin: 20px 0 !important;
+}
+.quicknote {
+  float: left;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+  width: 100%;
+}
+/*#membership-wrapper input,
+#membership-wrapper textarea,
+#membership-wrapper select{
+  display: inline-block;
+  width: 50%;
+  min-height: 20px;
+  padding: 3px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}*/
+#membership-wrapper label input, #membership-wrapper label textarea, #membership-wrapper label select {
+  display: block;
+}
+#membership-wrapper input[type="image"], #membership-wrapper input[type="checkbox"], #membership-wrapper input[type="radio"] {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: -8px 0;
+  line-height: normal;
+  border: 0;
+  cursor: pointer;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+#membership-wrapper input[type="button"], #membership-wrapper input[type="reset"], #membership-wrapper input[type="submit"] {
+  width: auto;
+  height: auto;
+}
+.alignright.button.blue{background: #009815 !important; color:#fff !important;}
+#membership-wrapper select[multiple], #membership-wrapper select[size] {
+  height: auto;
+}
+#membership-wrapper input[type="image"] {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+#membership-wrapper textarea {
+  height: auto;
+}
+#membership-wrapper input[type="hidden"] {
+  display: none;
+}
+#membership-wrapper .radio, #membership-wrapper .checkbox {
+  padding-left: 20px;
+}
+#membership-wrapper .radio input[type="radio"], #membership-wrapper .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: -20px;
+}
+#membership-wrapper .element > .radio:first-child, #membership-wrapper .element > .checkbox:first-child {
+  padding-top: 5px;
+}
+#membership-wrapper .radio.inline, #membership-wrapper .checkbox.inline {
+  display: inline-block;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+#membership-wrapper .radio.inline + .radio.inline, #membership-wrapper .checkbox.inline + .checkbox.inline {
+  margin-left: 10px;
+}
+#membership-wrapper .element > .radio.inline:first-child, #membership-wrapper .element > .checkbox.inline:first-child {
+  padding-top: 0;
+}
+#membership-wrapper input, #membership-wrapper textarea,.element #display_name {
+ float: left;  font-family: nevis,sans-serif;  font-size: 11px;  font-weight: bold;  margin: 3px 10px;  padding: 10px 12px;
+}
+#membership-wrapper input:focus, #membership-wrapper textarea:focus {
+    border-color: rgba(0, 0, 0, 0.8);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 0, 0, 0.6);
+}
+#membership-wrapper input[type="file"]:focus, #membership-wrapper input[type="checkbox"]:focus, #membership-wrapper select:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+#membership-wrapper :-moz-placeholder {
+  color: #999;
+}
+#membership-wrapper ::-webkit-input-placeholder {
+  color: #999;
+}
+#membership-wrapper .help-block {
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: #999999;    display:none;
+}
+#membership-wrapper .help-inline {
+  display: inline-block;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  padding-left: 10px;
+}
+#membership-wrapper form{
+  display: inline-block;
+  margin-bottom: 0;
+}
+#membership-wrapper label{
+  display: inline-block;
+}
+#membership-wrapper .form-element {
+  margin-bottom: 10px;
+}
+#membership-wrapper .form-membership legend + .form-element {
+  margin-top: 18px;
+  -webkit-margin-top-collapse: separate;
+}
+#membership-wrapper .form-membership {
+  margin-bottom: 18px;
+  width: 100%;
+  *zoom: 1;
+}
+#membership-wrapper .form-membership .form-element:before, #membership-wrapper .form-membership .form-element:after {
+  display: table;
+  content: "";
+}
+#membership-wrapper .form-membership .form-element:after {
+  clear: both;
+}
+#membership-wrapper .form-membership .form-element > label {
+  color: #e1dbc7;  float: left;  font-size: 16px;  font-weight: bold;  text-shadow: 1px 1px 2px #000;  width: 140px;
+}
+#membership-wrapper .form-membership .element {
+  margin-left: 170px;
+}
+#membership-wrapper .form-membership .form-actions {
+  padding-left: 170px;
+}
+#membership-wrapper .close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+#membership-wrapper .close:hover {
+  color: #000000;
+  text-decoration: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  cursor: pointer;
+}
+#membership-wrapper .btnstyle {
+  display: inline-block;
+  padding: 5px 10px 5px;
+  font-size: 1.2em;
+  line-height: 18px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-bottom-color: #bbb;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+#membership-wrapper .btnstyle:hover {
+  color: #333;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -ms-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  transition: background-position 0.1s linear;
+}
+#membership-wrapper .alert {
+  padding: 10px 30px 10px 15px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fbfce3;
+  border: 1px solid #ecf088;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+#membership-wrapper .alert{
+  color: #c09853;
+  margin: 20px 0; 	
+}
+#membership-wrapper .alert > span {
+  float: left;
+  margin: 20px 0;
+  width: 100%;
+}
+#membership-wrapper .alert .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 18px;
+}
+#membership-wrapper .alert-success {
+  background-color: #def7e4;
+  border-color: #8de3a1;
+}
+#membership-wrapper .alert-success, #membership-wrapper .alert-success .alert-heading {
+  color: #468847;
+}
+#membership-wrapper .alert-danger, #membership-wrapper .alert-error {
+  background-color: #fce5e3;
+  border-color: #f28f87;
+}
+#membership-wrapper .alert-error,
+#membership-wrapper .alert-error .alert-heading {
+  color: #b94a48;
+}
+.roundedOne {
+  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 50px;  box-shadow: 0 1px 1px #ffffff inset, 0 1px 3px rgba(0, 0, 0, 0.5);
+  float: left;  height: 24px;  margin: 0 9px 0 0;  position: relative;   padding: 3px 0 0 28px;
+}
+.roundedOne input[type="radio"] {
+  visibility: hidden;
+}
+.roundedOne input[type="radio"]:checked + label:after {
+  opacity: 1;
+}
+.roundedOne label:after {
+  background: linear-gradient(to bottom, #00BF00 0%, #009400 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 50px;
+  box-shadow: 0 1px 1px #FFFFFF inset, 0 1px 3px rgba(0, 0, 0, 0.5);
+  content: "";
+  height: 16px;
+  left: 2px;
+  opacity: 0;
+  position: absolute;
+  top: 2px;
+  width: 16px;
+}
+.roundedOne label {
+  background: linear-gradient(to bottom, #222222 0%, #45484D 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 50px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 #FFFFFF;
+  cursor: pointer;
+  height: 20px;
+  left: 4px;
+  position: absolute;
+  top: 3px;
+  width: 20px;
+}
+.customcbutton {
+  float: left;  font-size: 12px;  height: 22px;  margin: 0;  padding: 0 0 6px 28px;  position: relative;  width: 160px;
+}
+.customcbutton input[type="checkbox"] { 
+  visibility: hidden;
+}
+.customcbutton input[type="checkbox"]:checked + label:after{  
+  opacity:1;
+}
+.customcbutton label {
+ background: linear-gradient(to bottom, #FCFFF4 0%, #DFE5D7 40%, #B3BEAD 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 3px;  box-shadow: 1px 1px 2px #2E2E2E;  cursor: pointer;  height: 20px;  left: 0;  position: absolute;
+  top: 0;  width: 20px;
+}
+.customcbutton label:after {
+  border-color: -moz-use-text-color -moz-use-text-color #2C2C2C #2C2C2C;
+  border-image: none;
+  border-style: none none solid solid;  border-width: medium medium 3px 3px;  content: "";  height: 4px;
+  margin-left: 4px;  margin-top: 6px;  opacity: 0;  position: absolute;  transform: rotate(-40deg);  width: 9px;
+}
+
+.farm-questionnaire-section {
+  margin: 0 auto;  width: 960px; font-family: sans-serif;
+}
+.full-length-width {
+ border-bottom: 1px solid #fff;  float: left;  padding: 6px 0;  width: 100%;
+}
+span.full-inner-title {
+  float: left; font-size: 13px;  font-weight: bold;  width: 190px;  padding: 0 0 0 10px;
+}
+.checkbox-outerbox {
+  float: left;  width: 79%;
+}
+.add-PropertyForm {
+  margin-top: 20px !important;
+}
+.paa_fieldaddlistion{
+ background:#009815 !important;
+ cursor:pointer;
+ color:#ffffff !important;
+}
+#login_right.alignleft {
+  background: none repeat scroll 0 0 #009815;
+  border: 1px solid #737373;
+  color: #fff;
+  margin: 3px 8%;
+  padding: 7px;
+}
+.roundedOnecheck {
+  background: linear-gradient(to bottom, hsl(76, 100%, 98%) 0%, hsl(86, 21%, 87%) 40%, hsl(99, 12%, 71%) 100%) repeat scroll 0 0 hsla(0, 0%, 0%, 0);
+  border-radius: 50px;
+  box-shadow: 0 1px 1px hsl(0, 0%, 100%) inset, 0 1px 3px hsla(0, 0%, 0%, 0.5);
+  float: left;
+  height: 24px;
+  margin: 0 9px 0 0;
+  padding: 3px 0 0 28px;
+  position: relative;
+}
+.roundedOnecheck input[type="checkbox"] {
+  visibility: hidden;
+}
+.roundedOnecheck input[type="checkbox"]:checked + label:after {
+  opacity: 1;
+}
+.roundedOnecheck label:after {
+  background: linear-gradient(to bottom, #00BF00 0%, #009400 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 50px;
+  box-shadow: 0 1px 1px #FFFFFF inset, 0 1px 3px rgba(0, 0, 0, 0.5);
+  content: "";
+  height: 16px;
+  left: 2px;
+  opacity: 0;
+  position: absolute;
+  top: 2px;
+  width: 16px;
+}
+.roundedOnecheck label {
+  background: linear-gradient(to bottom, #222222 0%, #45484D 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border-radius: 50px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 #FFFFFF;
+  cursor: pointer;
+  height: 20px;
+  left: 4px;
+  position: absolute;
+  top: 4px;
+  width: 20px;
+}
+/* 175838-1366581706-ai */

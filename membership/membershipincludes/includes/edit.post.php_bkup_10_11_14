@@ -1,0 +1,435 @@
+<?php
+require_once ABSPATH .'/wp-load.php';
+require_once ABSPATH .'/wp-includes/post.php';
+include_once ABSPATH .'/wp-content/plugins/membership/membershipincludes/includes/lib/GMap/simpleGMapAPI.php';
+include_once ABSPATH .'/wp-content/plugins/membership/membershipincludes/includes/lib/GMap/simpleGMapGeocoder.php';
+include( ABSPATH . 'wp-admin/includes/image.php' );
+if ( ! function_exists( 'wp_handle_upload' ) ) { require_once( ABSPATH . 'wp-admin/includes/file.php' ); }
+global $wpdb;
+$ID = $_REQUEST['id'];
+$Query = "Select P.*,Q.* from `".$wpdb->prefix ."posts` as P INNER JOIN `".$wpdb->prefix ."question` as Q  ON P.ID = Q.post_ID where P.ID = ".$ID." AND P.post_type = 'property'";
+$Results = $wpdb->get_results($Query);
+if(isset($_POST['postupdate'])):
+	$searchLocation = $_POST['myplugin_new_field_zip'];
+	if(!empty($searchLocation)):
+	$gMapGeocoder = new simpleGMapGeocoder();
+	$result = $gMapGeocoder->getGeoCoords($searchLocation);
+		if ($result['status'] === 'OK'):
+			$longitude = $result['lng'];
+			$latitude = $result['lat'];
+		endif;					
+	endif;
+
+$Boardingpro = serialize($_POST['boarding_provided']);
+$Discipline = serialize($_POST['discipline']);
+	
+update_post_meta($ID , 'Address' ,$_POST['postadress']);
+ $upload_dir = wp_upload_dir();
+ #Update post 
+  $USerpost = array(
+      'ID'           => $ID,
+	  'post_title' => $_POST['postname'],    
+      'post_content' => $_POST['postdescription']
+  );
+#Update the post into the database
+$lastid = wp_update_post( $USerpost );
+$target_path = $upload_dir['basedir'].'/'.get_the_date('Y/m'); 
+move_uploaded_file($_FILES['image']['tmp_name'], $target_path.'/'.$_FILES['image']['name']);  
+$filename = $upload_dir['basedir'].'/'.get_the_date('Y/m'). '/' .$_FILES['image']['name'];
+$filetype = wp_check_filetype( $filename );
+$args = array(
+    'post_mime_type' => $filetype['type'],
+    'post_title'     => $_FILES['image']['name'], // you may want something different here
+    'post_content'   => '',
+    'post_status'    => 'inherit'
+);
+#Insert the attachment.       
+$thumb_id = wp_insert_attachment( $args, $filename,  $lastid );
+
+#Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+$metadata = wp_generate_attachment_metadata( $thumb_id, $filename );
+
+#Generate the metadata for the attachment, and update the database record.
+wp_update_attachment_metadata( $thumb_id, $metadata );
+
+update_post_meta( $lastid, '_thumbnail_id', $thumb_id );
+	
+	$upload_dir = wp_upload_dir();
+	$target_path = $upload_dir['path'];     # Declaring Path for uploaded images.
+	
+	move_uploaded_file($_FILES['image2']['tmp_name'], $target_path.'/'.$_FILES['image2']['name']);
+	
+	move_uploaded_file($_FILES['image3']['tmp_name'], $target_path.'/'.$_FILES['image3']['name']);
+
+	$dirpath = $upload_dir['subdir'];
+
+#Insert the post meta into the database
+$Query = "UPDATE `wp_bmee_question` SET `farmcity` = '".$_POST['myplugin_new_field_city']."',`farmzip` = '".$_POST['myplugin_new_field_zip']."',`Region` = '".$_POST['myplugin_new_field_Region']."',`type_of_facility` = '".$_POST['myplugin_new_field_Facility']."',`boarding_provided` = '".$Boardingpro."',`discipline_specific` = '".$Discipline."',`trainer_provided` = '".$_POST['trainerprovided']."',`boarder_population` = '".$_POST['boarderpopulation']."',`lessons_provided` = '".$_POST['lessonsprovided']."',`Owners_live_on_farm` = '".$_POST['ownersliveonfarm']."',`observation_room` = '".$_POST['observationroom']."',`inside_bathroom` = '".$_POST['insidebathroom']."',`grain_provided` = '".$_POST['grainprovided']."',`supplements_given` = '".$_POST['supplementsgiven']."',`indoor_arena` = '".$_POST['indoorarena']."',`outdoor_arena` = '".$_POST['outdoorarena']."',`round_pen` = '".$_POST['roundpen']."',`trails` = '".$_POST['trails']."',`wash_rack` = '".$_POST['washrackwithhot']."',`turn_out1` = '".$_POST['turnout']."',`turn_out2` = '".$_POST['turnouts']."',`fencing` = '".$_POST['fencing']."',`stand_for_vet` = '".$_POST['standforvet']."',`trailer_parking` = '".$_POST['trailerparking']."',`package` = '".$_POST['myplugin_package_field_hidden']."', `worming_schedule` = '".$_POST['wormingschedule']."', `images` = '".serialize(array('wp-content/uploads'.$dirpath. '/' .$_FILES['image2']['name'] , 'wp-content/uploads'.$dirpath. '/' .$_FILES['image3']['name']))."',`latitude` = '".$latitude."', `longitude` = '".$longitude."' WHERE `post_ID` = '".$ID."' ";
+
+
+
+
+    if($wpdb->query($Query)):
+        wp_redirect(site_url('edit-listing?action=true'));
+	else:
+		/* echo $Query;*/
+	endif;
+ endif;
+?>
+<?php 
+	$checked = array();
+	$arr = unserialize($Results[0]->boarding_provided); 
+		foreach($arr as $array):
+			$checked[] = $array;
+		endforeach;	
+	$dis = unserialize($Results[0]->discipline_specific); 
+		foreach($dis as $spec):
+			$checked[] = $spec;
+		endforeach;
+		$checked[] = $Results[0]->type_of_facility;
+		$checked[] = $Results[0]->trainer_provided;
+		$checked[] = $Results[0]->boarder_population;
+		$checked[] = $Results[0]->Owners_live_on_farm;
+		$checked[] = $Results[0]->observation_room;
+		$checked[] = $Results[0]->inside_bathroom;
+		$checked[] = $Results[0]->grain_provided;
+		$checked[] = $Results[0]->supplements_given;
+		$checked[] = $Results[0]->indoor_arena;
+		$checked[] = $Results[0]->outdoor_arena;
+		$checked[] = $Results[0]->round_pen;
+		$checked[] = $Results[0]->wash_rack;
+		$checked[] = $Results[0]->turn_out1;
+		$checked[] = $Results[0]->turn_out2;
+		$checked[] = $Results[0]->fencing;
+		$checked[] = $Results[0]->stand_for_vet;
+		$checked[] = $Results[0]->trailer_parking;
+		$checked[] = $Results[0]->worming_schedule;
+?>
+<script>
+jQuery(document).ready(function(){	
+	<?php foreach($checked as $values): ?>
+			jQuery( "input[value='<?php echo $values; ?>']" ).attr ( "checked" ,"checked" );
+	<?php endforeach; ?>
+	jQuery('#myplugin_new_field_Region option').each(function(){
+		var tempVal = jQuery(this).val();
+		var checkVal = '<?php echo $Results[0]->Region; ?>';		
+		if(tempVal == checkVal){
+			jQuery(this).attr("selected",true);			
+		}
+	}); 
+});
+</script>
+<style type="text/css">
+.metabox_fields li {
+	display: inline; 
+	margin-left: 20px; 
+}
+.metabox_fields {
+	margin: 20px 0;
+}
+.metabox_fields label {
+	float: left;  
+	width: 30%;
+}
+.paa_fieldaddlistion {
+  background: none repeat scroll 0 0 #009815 !important;
+  color: #fff;
+  cursor: pointer;
+}
+ul.add-PropertyForm {
+  margin: 20px 0 !important;
+}
+.add-PropertyForm input[type=checkbox], .add-PropertyForm input[type=radio] {
+  background: none repeat scroll 0 0 #fff;
+  border: 1px solid #737373;
+  padding: 6px 20px;
+  width: 3%;
+}
+.attachment-post-thumbnail.wp-post-image {
+  height: 50px;
+  width: 100px;
+}
+</style>
+<div id="membership-wrapper">
+<form action="" method="post" name="postupdateform" enctype="multipart/form-data">
+<div class="property_after_wrapper">
+	<ul class="add-PropertyForm">
+		<li>
+			<h6 class="add-PropertyForm-list-title" for="user_login">Post Title</h6>
+			<span class="add-PropertyForm-textfild">
+				<input type="text" name="postname" value="<?php echo $Results[0]->post_title;?>"/>
+				<input type="hidden" name="myplugin_package_field_hidden" value="<?php echo $Results[0]->package; ?>"/>
+			</span>
+		</li>
+		<li>	
+			<h6 class="add-PropertyForm-list-title" for="user_login">Post Address</h6>
+			<span class="add-PropertyForm-textfild">
+			<input type="text" name="postadress" value="<?php echo get_post_meta($ID , 'Address' , true);?>"/> 
+			</span>
+		</li>
+		<li>
+			<h6 class="add-PropertyForm-list-title" for="user_login">Post Content</h6>
+			<span class="add-PropertyForm-textfild">
+				<textarea name="postdescription"><?php echo $Results[0]->post_content;?></textarea>
+			</span>
+		</li>
+		<?php if($Results[0]->package){ ?>
+		<li>
+			<h6 class="add-PropertyForm-list-title">Post Featured Image</h6>
+			<span class="add-PropertyForm-textfild">
+				<input type="file" name="image"/>
+			</span>
+			<div class="image_preview">
+				<?php 
+				$image = wp_get_attachment_image_src( get_post_thumbnail_id( $ID ), 'single-post-thumbnail' );
+				if(!empty($image[0])): ?>
+				<img src="<?php echo $image[0]; ?>" style='width: 100px; height: 50px;'>
+				<?php 
+				else:
+					echo 'No Preview Available';
+				endif; 
+				?>
+			</div>
+		</li>
+		<li>
+			<h6 class="add-PropertyForm-list-title">Image</h6>
+			<span class="add-PropertyForm-textfild">
+				<input type="file" name="image2"/>
+			</span>
+			<div class="image_preview">
+				<?php 
+				$images = unserialize($Results[0]->images);
+				?>
+				 <img src="<?php echo site_url(). '/' .$images[0]; ?>" style='width: 100px; height: 50px;'>
+			</div>
+		</li>
+		<li>
+			<h6 class="add-PropertyForm-list-title">Image</h6>
+			<span class="add-PropertyForm-textfild">
+				<input type="file" name="image3"/>
+			</span>
+			<div class="image_preview">
+				 <img src="<?php echo site_url(). '/' .$images[1]; ?>" style='width: 100px; height: 50px;'>
+			</div>			
+		</li>	
+		<?php } ?>
+	<li>
+		<h6 class="add-PropertyForm-list-title">City</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="text" name="myplugin_new_field_city" value="<?php echo $Results[0]->farmcity; ?>" />
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Zip</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="text" name="myplugin_new_field_zip" value="<?php echo $Results[0]->farmzip; ?>" />
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">What Region is the Property in</h6>
+		<span class="add-PropertyForm-textfild">
+			<select name="myplugin_new_field_Region" id="myplugin_new_field_Region">
+				<option>Select Property Region</option>
+	            <option value="Upper Peninsula">Upper Peninsula</option>
+	            <option value="Central Michigan">Central Michigan</option>
+	            <option value="Lower Michigan">Lower Michigan</option>
+	            <option value="Western Michigan">Western Michigan</option>
+        			<option value="Detroit">Detroit</option>
+			</select>
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">What type of Facility is this?</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Boarding" name="myplugin_new_field_Facility" /> Boarding 
+			<input type="radio" value="Boarding & Training" name="myplugin_new_field_Facility" /> Boarding & Training
+			<input type="radio" value="Training" name="myplugin_new_field_Facility" /> Training
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Boarding Provided:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="checkbox" value="Stall Board" name="boarding_provided[]" /> Stall Board
+			<input type="checkbox" value="Pasture Board" name="boarding_provided[]" /> Pasture Board
+			<input type="checkbox" value="Partial Board" name="boarding_provided[]" /> Partial Board
+			<input type="checkbox" value="Self-Board" name="boarding_provided[]" /> Self-Board
+			<input type="checkbox" value="Personal Stall" name="boarding_provided[]" /> Personal Stall
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Discipline Specific:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="checkbox" value="English" name="discipline[]" /> English
+			<input type="checkbox" value="English Pleasure" name="discipline[]" /> English Pleasure
+			<input type="checkbox" value="Western" name="discipline[]" /> Western
+			<input type="checkbox" value="Western Pleasure" name="discipline[]" /> Western Pleasure
+			<input type="checkbox" value="Dressage" name="discipline[]" /> Dressage
+			<input type="checkbox" value="Saddle Seat" name="discipline[]" /> Saddle Seat
+                        <input type="checkbox" value="Hunter/Jumper" name="discipline[]" /> Hunter/Jumper
+			<input type="checkbox" value="Eventing" name="discipline[]" /> Eventing
+			<input type="checkbox" value="Polo and Polocrosse" name="discipline[]" /> Polo and Polocrosse
+			<input type="checkbox" value="Gymkhana Events" name="discipline[]" /> Gymkhana Events
+			<input type="checkbox" value="Field/Foxhunting" name="discipline[]" /> Field/Foxhunting
+			<input type="checkbox" value="Harness Racing" name="discipline[]" /> Harness Racing
+			<input type="checkbox" value="Racing" name="discipline[]" /> Racing
+                        <input type="checkbox" value="Not Discipline Specific" name="discipline[]" /> Not Discipline Specific
+			<input type="checkbox" value="Other" name="discipline[]" /> Other
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Trainer Provided:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Farm Trainers only" name="trainerprovided" /> Farm Trainers only
+			<input type="radio" value="Outside Trainers allowed" name="trainerprovided" /> Outside Trainers allowed
+			<input type="radio" value="or Either" name="trainerprovided" /> or Either
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Boarder Population:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Adult" name="boarderpopulation" /> Adult
+			<input type="radio" value="Family oriented" name="boarderpopulation" /> Family oriented
+			<input type="radio" value="Teenagers" name="boarderpopulation" /> Teenagers
+			<input type="radio" value="Mixed" name="boarderpopulation" /> Mixed
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Lessons provided:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_Lessons" name="lessonsprovided" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_Lessons" name="lessonsprovided" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Owners live on farm:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_Owners" name="ownersliveonfarm" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_Owners" name="ownersliveonfarm" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Observation Room:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_Room" name="observationroom" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_Room" name="observationroom" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Inside bathroom:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_bathroom" name="insidebathroom" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_bathroom" name="insidebathroom" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Grain provided?</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_Grain" name="grainprovided" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_Grain" name="grainprovided" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Supplements given:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_given" name="supplementsgiven" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_given" name="supplementsgiven" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Indoor arena:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_arena" name="indoorarena" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_arena" name="indoorarena" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Outdoor arena:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_Outdoor" name="outdoorarena" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_Outdoor" name="outdoorarena" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Round pen:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_pen" name="roundpen" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_pen" name="roundpen" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Trails:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="On Farm" id="myplugin_new_field_Trails" name="trails" /> On Farm
+			<input type="radio" value="Nearby" id="myplugin_new_field_Trails" name="trails" /> Nearby
+			<input type="radio" value="Dirt Roads" id="myplugin_new_field_Trails" name="trails" /> Dirt Roads
+			<input type="radio" value="All" id="myplugin_new_field_Trails" name="trails" /> All
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Wash Rack:</h6>
+		<span class="add-PropertyForm-textfild">
+		<input type="radio" value="Yes(cold water)" id="myplugin_new_field_rack" name="washrackwithhot" /> Yes(cold water)
+        <input type="radio" value="Yes(cold and warm)" id="myplugin_new_field_rack" name="washrackwithhot" /> Yes(cold and warm)
+		<input type="radio" value="No" id="myplugin_new_field_rack" name="washrackwithhot" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Gender Turnout:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Single Gender" id="myplugin_new_field_out" name="turnout" /> Single Gender
+			<input type="radio" value="Mix Gender" id="myplugin_new_field_out" name="turnout" /> Mix Gender
+			<input type="radio" value="Both" id="myplugin_new_field_out" name="turnout" /> Both
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Turnout Environment:</h6>
+		<span class="add-PropertyForm-textfild">
+			 : <input type="radio" value="Paddock" id="myplugin_new_field_Turn" name="turnouts" /> Paddock
+			 : <input type="radio" value="Pasture" id="myplugin_new_field_Turn" name="turnouts" /> Pasture
+			 : <input type="radio" value="Both" id="myplugin_new_field_Turn" name="turnouts" /> Both
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Fencing:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Chicken wire" id="myplugin_new_field_Fencing" name="fencing" /> Chicken wire
+			<input type="radio" value="Cable fence" id="myplugin_new_field_Fencing" name="fencing" /> Cable fence
+			<input type="radio" value="Hotwire" id="myplugin_new_field_Fencing" name="fencing" /> Hotwire
+			<input type="radio" value="Wood fencing" id="myplugin_new_field_Fencing" name="fencing" /> Wood fencing
+			<input type="radio" value="Metal fecing" id="myplugin_new_field_Fencing" name="fencing" /> Metal fecing
+			<input type="radio" value="Other" id="myplugin_new_field_Fencing" name="fencing" /> Other
+		</span>
+	</li>
+	<li>	
+		<h6 class="add-PropertyForm-list-title">Stand for Vet</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_Vet" name="standforvet" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_Vet" name="standforvet" /> No
+		</span>
+	</li>	
+	<li>
+		<h6 class="add-PropertyForm-list-title">Trailer parking:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes" id="myplugin_new_field_parking" name="trailerparking" /> Yes
+			<input type="radio" value="No" id="myplugin_new_field_parking" name="trailerparking" /> No
+		</span>
+	</li>
+	<li>
+		<h6 class="add-PropertyForm-list-title">Worming Schedule with the following buttons:</h6>
+		<span class="add-PropertyForm-textfild">
+			<input type="radio" value="Yes & You Supply" name="wormingschedule" /> Yes & You Supply
+			<input type="radio" value="Yes & You or Farm Supplies oriented" name="wormingschedule" /> Yes & You or Farm Supplies oriented
+			<input type="radio" value="No" name="wormingschedule" /> No
+			<input type="radio" value="You Give on Your Schedule" name="wormingschedule" /> You Give on Your Schedule
+		</span>
+	</li>
+		<li>
+			<span class="add-PropertyForm-textfild">
+				<input style="margin-left: 50px;padding: 12.5px 20px;border: medium none;" class="paa_fieldaddlistion" type="submit" name="postupdate" value="Update"/>
+				<a style="border: medium none;" class="paa_fieldaddlistion" href="<?php echo site_url('account');?>">Back To My Account</a>
+			</span>
+		</li>
+ 	</ul>
+ </div>	
+</form>	
+</div>
